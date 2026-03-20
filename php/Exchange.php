@@ -408,6 +408,7 @@ class Exchange {
         'gate',
         'gateio',
         'gemini',
+        'gmx',
         'grvt',
         'hashkey',
         'hibachi',
