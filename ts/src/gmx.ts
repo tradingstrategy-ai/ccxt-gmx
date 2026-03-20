@@ -153,10 +153,10 @@ export default class gmx extends Exchange {
     }
 
     getBridgeUrl (): string {
-        const fromOptions = this.safeString2 (this.options, 'bridgeUrl', 'bridgeURL');
         const fromInstance = this.safeString2 (this, 'bridgeUrl', 'bridgeURL');
+        const fromOptions = this.safeString2 (this.options, 'bridgeUrl', 'bridgeURL');
         const fromUrls = this.safeString (this.safeDict (this.urls, 'api'), 'rest');
-        const url = fromOptions || fromInstance || fromUrls;
+        const url = fromInstance || fromOptions || fromUrls;
         if (url === undefined) {
             throw new ArgumentsRequired (this.id + ' requires bridgeUrl in the constructor');
         }
@@ -164,11 +164,15 @@ export default class gmx extends Exchange {
     }
 
     getBridgeToken (): Str {
+        const fromInstance = this.safeString2 (this, 'token', 'authToken');
+        if (fromInstance !== undefined) {
+            return fromInstance;
+        }
         const token = this.safeString2 (this.options, 'token', 'authToken');
         if (token !== undefined) {
             return token;
         }
-        return this.safeString2 (this, 'token', 'authToken');
+        return undefined;
     }
 
     bridgeMethodName (methodName: string): string {

@@ -136,19 +136,22 @@ class gmx(Exchange, ImplicitAPI):
         })
 
     def get_bridge_url(self) -> str:
-        fromOptions = self.safe_string_2(self.options, 'bridgeUrl', 'bridgeURL')
         fromInstance = self.safe_string_2(self, 'bridgeUrl', 'bridgeURL')
+        fromOptions = self.safe_string_2(self.options, 'bridgeUrl', 'bridgeURL')
         fromUrls = self.safe_string(self.safe_dict(self.urls, 'api'), 'rest')
-        url = fromOptions or fromInstance or fromUrls
+        url = fromInstance or fromOptions or fromUrls
         if url is None:
             raise ArgumentsRequired(self.id + ' requires bridgeUrl in the constructor')
         return url.replace(/\/+$/, '')
 
     def get_bridge_token(self) -> Str:
+        fromInstance = self.safe_string_2(self, 'token', 'authToken')
+        if fromInstance is not None:
+            return fromInstance
         token = self.safe_string_2(self.options, 'token', 'authToken')
         if token is not None:
             return token
-        return self.safe_string_2(self, 'token', 'authToken')
+        return None
 
     def bridge_method_name(self, methodName: str) -> str:
         return methodName.replace(/([a-z0-9])([A-Z])/g, '$1_$2').lower()

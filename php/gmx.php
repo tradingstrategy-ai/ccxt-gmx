@@ -119,10 +119,10 @@ class gmx extends Exchange {
     }
 
     public function get_bridge_url(): string {
-        $fromOptions = $this->safe_string_2($this->options, 'bridgeUrl', 'bridgeURL');
         $fromInstance = $this->safe_string_2($this, 'bridgeUrl', 'bridgeURL');
+        $fromOptions = $this->safe_string_2($this->options, 'bridgeUrl', 'bridgeURL');
         $fromUrls = $this->safe_string($this->safe_dict($this->urls, 'api'), 'rest');
-        $url = $fromOptions || $fromInstance || $fromUrls;
+        $url = $fromInstance || $fromOptions || $fromUrls;
         if ($url === null) {
             throw new ArgumentsRequired($this->id . ' requires bridgeUrl in the constructor');
         }
@@ -130,11 +130,15 @@ class gmx extends Exchange {
     }
 
     public function get_bridge_token(): ?string {
+        $fromInstance = $this->safe_string_2($this, 'token', 'authToken');
+        if ($fromInstance !== null) {
+            return $fromInstance;
+        }
         $token = $this->safe_string_2($this->options, 'token', 'authToken');
         if ($token !== null) {
             return $token;
         }
-        return $this->safe_string_2($this, 'token', 'authToken');
+        return null;
     }
 
     public function bridge_method_name(string $methodName): string {
